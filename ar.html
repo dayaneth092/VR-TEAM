@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Flujo convectivo — AR</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+<body>
+
+<div class="loading">cargando cámara y escena…</div>
+
+<div class="topbar">
+  <a class="back" href="index.html">&larr; inicio</a>
+  <div class="hint">apunta la cámara al marcador Hiro</div>
+</div>
+
+<a-scene
+  embedded
+  vr-mode-ui="enabled: false"
+  renderer="logarithmicDepthBuffer: true; colorManagement: true"
+  arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+
+  <a-marker preset="hiro" id="hiro-marker">
+    <a-entity id="rig" position="-0.5 0 -0.5" scale="0.55 0.55 0.55">
+
+      <!-- punto P, origen del elemento de volumen -->
+      <a-sphere id="punto-p" radius="0.03" position="0.5 0 0.5"
+        material="color:#eef1f6; shader:flat"></a-sphere>
+
+      <!-- las tres caras dS perpendiculares a cada eje -->
+      <a-box id="cara-x" width="0.012" height="1" depth="1" position="0 0.5 0.5"
+        material="color:#2dd4bf; opacity:0.32; transparent:true; shader:flat; side:double"></a-box>
+      <a-box id="cara-y" width="1" height="0.012" depth="1" position="0.5 0 0.5"
+        material="color:#e2794f; opacity:0.32; transparent:true; shader:flat; side:double"></a-box>
+      <a-box id="cara-z" width="1" height="1" depth="0.012" position="0.5 0.5 0"
+        material="color:#8b7fe8; opacity:0.32; transparent:true; shader:flat; side:double"></a-box>
+
+      <!-- ejes de referencia -->
+      <a-entity line="start:0 0 0.5; end:1.35 0 0.5; color:#8891a3; opacity:0.6"></a-entity>
+      <a-entity line="start:0.5 0 0; end:0.5 0 1.35; color:#8891a3; opacity:0.6"></a-entity>
+      <a-entity line="start:0.5 0 0.5; end:0.5 1.35 0.5; color:#8891a3; opacity:0.6"></a-entity>
+      <a-text value="x" position="1.42 0 0.5" align="center" color="#8891a3" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="z" position="0.5 0 1.42" align="center" color="#8891a3" scale="0.6 0.6 0.6"></a-text>
+      <a-text value="y" position="0.5 1.42 0.5" align="center" color="#8891a3" scale="0.6 0.6 0.6"></a-text>
+
+      <!-- lineas de proyeccion de v sobre cada cara -->
+      <a-entity id="proj-x" position="0.5 0 0.5"
+        line="start:0 0 0; end:0 0 0; color:#2dd4bf; opacity:0.55"></a-entity>
+      <a-entity id="proj-y" position="0.5 0 0.5"
+        line="start:0 0 0; end:0 0 0; color:#e2794f; opacity:0.55"></a-entity>
+      <a-entity id="proj-z" position="0.5 0 0.5"
+        line="start:0 0 0; end:0 0 0; color:#8b7fe8; opacity:0.55"></a-entity>
+
+      <!-- vector v: grupo orientable con asta + punta -->
+      <a-entity id="vector-v" position="0.5 0 0.5">
+        <a-cylinder class="v-shaft" radius="0.014" height="0.5" position="0 0.25 0"
+          material="color:#f2a623; shader:flat"></a-cylinder>
+        <a-cone class="v-head" radius-bottom="0.04" radius-top="0" height="0.09" position="0 0.5 0"
+          material="color:#f2a623; shader:flat"></a-cone>
+      </a-entity>
+
+    </a-entity>
+  </a-marker>
+
+  <a-entity camera></a-entity>
+</a-scene>
+
+<div class="panel">
+  <div class="sliders">
+    <div class="slider-group">
+      <label><span class="sym">v<sub>x</sub></span><span class="val" id="val-vx">0.60</span></label>
+      <input type="range" id="slider-vx" min="-1" max="1" step="0.01" value="0.6">
+    </div>
+    <div class="slider-group">
+      <label><span class="sym">v<sub>y</sub></span><span class="val" id="val-vy">0.40</span></label>
+      <input type="range" id="slider-vy" min="-1" max="1" step="0.01" value="0.4">
+    </div>
+    <div class="slider-group">
+      <label><span class="sym">v<sub>z</sub></span><span class="val" id="val-vz">0.80</span></label>
+      <input type="range" id="slider-vz" min="-1" max="1" step="0.01" value="0.8">
+    </div>
+    <div class="slider-group">
+      <label><span class="sym">&rho;<sub>A</sub></span><span class="val" id="val-rho">1.00</span></label>
+      <input type="range" id="slider-rho" min="0" max="2" step="0.01" value="1">
+    </div>
+  </div>
+  <div class="readout">
+    <div class="formula">
+      j<sub>A</sub><span class="badge-x">(c)</span> = &rho;<sub>A</sub>(v<sub>x</sub>&delta;<sub>x</sub> + v<sub>y</sub>&delta;<sub>y</sub> + v<sub>z</sub>&delta;<sub>z</sub>)
+    </div>
+    <div class="value">
+      j<sub>x</sub>=<span id="val-jx">0.60</span>&nbsp;
+      j<sub>y</sub>=<span id="val-jy">0.40</span>&nbsp;
+      j<sub>z</sub>=<span id="val-jz">0.80</span>&nbsp;
+      |j|=<span id="val-jmag">1.08</span>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
