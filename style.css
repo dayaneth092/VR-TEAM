@@ -132,15 +132,8 @@ input[type=range]{
   color:var(--text-dim); font-size:13px; font-family:'JetBrains Mono',monospace;
 }
 
-/* Forzar que el video de la camara (inyectado por AR.js) siempre sea visible
-   a pantalla completa, por si algun estilo por defecto lo deja invisible. */
+/* Asegurar que el video de la camara (inyectado por AR.js) sea visible. */
 video{
-  position:fixed !important; top:0 !important; left:0 !important;
-  width:100% !important; height:100% !important;
-  object-fit:cover !important; z-index:0 !important;
-  display:block !important; opacity:1 !important;
-}
-a-scene canvas{
-  position:fixed !important; top:0 !important; left:0 !important;
-  z-index:1 !important;
+  display:block !important;
+  opacity:1 !important;
 }
