@@ -6,7 +6,6 @@
 <title>Flujo convectivo — vista 3D</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/tizzle/aframe-orbit-controls-component@master/dist/aframe-orbit-controls-component.min.js"></script>
 </head>
 <body>
 
@@ -14,14 +13,14 @@
 
 <div class="topbar">
   <a class="back" href="index.html">&larr; inicio</a>
-  <div class="hint">arrastra para rotar &middot; rueda del mouse para zoom</div>
+  <div class="hint">arrastra con 1 dedo para rotar &middot; pellizca (o rueda del mouse) para zoom</div>
 </div>
 
 <a-scene embedded vr-mode-ui="enabled: false" background="color:#0c1018">
 
   <a-entity id="rig" position="-0.5 -0.5 -0.5">
 
-    <a-sphere id="punto-p" radius="0.03" position="0.5 0 0.5"
+    <a-sphere id="punto-p" radius="0.03" position="0 0 0"
       material="color:#eef1f6; shader:flat"></a-sphere>
 
     <a-box id="cara-x" width="0.012" height="1" depth="1" position="0 0.5 0.5"
@@ -38,14 +37,14 @@
     <a-text value="z" position="0.5 0 1.42" align="center" color="#8891a3" scale="0.6 0.6 0.6"></a-text>
     <a-text value="y" position="0.5 1.42 0.5" align="center" color="#8891a3" scale="0.6 0.6 0.6"></a-text>
 
-    <a-entity id="proj-x" position="0.5 0 0.5"
+    <a-entity id="proj-x" position="0 0 0"
       line="start:0 0 0; end:0 0 0; color:#2dd4bf; opacity:0.55"></a-entity>
-    <a-entity id="proj-y" position="0.5 0 0.5"
+    <a-entity id="proj-y" position="0 0 0"
       line="start:0 0 0; end:0 0 0; color:#e2794f; opacity:0.55"></a-entity>
-    <a-entity id="proj-z" position="0.5 0 0.5"
+    <a-entity id="proj-z" position="0 0 0"
       line="start:0 0 0; end:0 0 0; color:#8b7fe8; opacity:0.55"></a-entity>
 
-    <a-entity id="vector-v" position="0.5 0 0.5">
+    <a-entity id="vector-v" position="0 0 0">
       <a-cylinder class="v-shaft" radius="0.014" height="0.5" position="0 0.25 0"
         material="color:#f2a623; shader:flat"></a-cylinder>
       <a-cone class="v-head" radius-bottom="0.04" radius-top="0" height="0.09" position="0 0.5 0"
@@ -54,8 +53,7 @@
 
   </a-entity>
 
-  <a-entity camera="fov:50" position="0 0.3 2.6"
-    orbit-controls="target: 0 -0.15 0; minDistance:1; maxDistance:5; enableDamping:true; dampingFactor:0.15; rotateSpeed:0.6"></a-entity>
+  <a-entity id="camara-libre" camera="fov:50"></a-entity>
 </a-scene>
 
 <div class="panel">
