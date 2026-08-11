@@ -6,11 +6,11 @@
 <title>Flujo convectivo — AR</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
 </head>
 <body>
 
-<div class="loading">cargando cámara y escena…</div>
+<div class="loading" id="pantalla-carga">cargando cámara y escena…</div>
 
 <div class="topbar">
   <a class="back" href="index.html">&larr; inicio</a>
@@ -27,7 +27,7 @@
     <a-entity id="rig" position="-0.5 0 -0.5" scale="0.55 0.55 0.55">
 
       <!-- punto P, origen del elemento de volumen -->
-      <a-sphere id="punto-p" radius="0.03" position="0.5 0 0.5"
+      <a-sphere id="punto-p" radius="0.03" position="0 0 0"
         material="color:#eef1f6; shader:flat"></a-sphere>
 
       <!-- las tres caras dS perpendiculares a cada eje -->
@@ -47,15 +47,15 @@
       <a-text value="y" position="0.5 1.42 0.5" align="center" color="#8891a3" scale="0.6 0.6 0.6"></a-text>
 
       <!-- lineas de proyeccion de v sobre cada cara -->
-      <a-entity id="proj-x" position="0.5 0 0.5"
+      <a-entity id="proj-x" position="0 0 0"
         line="start:0 0 0; end:0 0 0; color:#2dd4bf; opacity:0.55"></a-entity>
-      <a-entity id="proj-y" position="0.5 0 0.5"
+      <a-entity id="proj-y" position="0 0 0"
         line="start:0 0 0; end:0 0 0; color:#e2794f; opacity:0.55"></a-entity>
-      <a-entity id="proj-z" position="0.5 0 0.5"
+      <a-entity id="proj-z" position="0 0 0"
         line="start:0 0 0; end:0 0 0; color:#8b7fe8; opacity:0.55"></a-entity>
 
       <!-- vector v: grupo orientable con asta + punta -->
-      <a-entity id="vector-v" position="0.5 0 0.5">
+      <a-entity id="vector-v" position="0 0 0">
         <a-cylinder class="v-shaft" radius="0.014" height="0.5" position="0 0.25 0"
           material="color:#f2a623; shader:flat"></a-cylinder>
         <a-cone class="v-head" radius-bottom="0.04" radius-top="0" height="0.09" position="0 0.5 0"
@@ -101,5 +101,24 @@
 </div>
 
 <script src="app.js"></script>
+<script>
+  // Si en 6 segundos la camara no esta transmitiendo, algo fallo:
+  // mostramos un aviso claro en vez de dejar la pantalla negra sin explicacion.
+  setTimeout(function () {
+    var video = document.querySelector('video');
+    var camaraFunciona = video && video.readyState >= 2 && video.videoWidth > 0;
+    var pantalla = document.querySelector('#pantalla-carga');
+    if (!camaraFunciona && pantalla) {
+      pantalla.style.display = 'flex';
+      pantalla.innerHTML =
+        '<div style="max-width:300px;text-align:center;line-height:1.7;padding:24px;">' +
+        'No se pudo abrir la cámara.<br><br>' +
+        '1) Abre este link directo en Chrome o Safari (no desde WhatsApp/Instagram)<br>' +
+        '2) Revisa que el navegador tenga permiso de cámara en Ajustes del celular<br>' +
+        '3) Recarga la página' +
+        '</div>';
+    }
+  }, 6000);
+</script>
 </body>
 </html>
