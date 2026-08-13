@@ -16,7 +16,7 @@
   <div class="hint">arrastra con 1 dedo para rotar &middot; pellizca (o rueda del mouse) para zoom</div>
 </div>
 
-<a-scene embedded vr-mode-ui="enabled: false" background="color:#0c1018">
+<a-scene vr-mode-ui="enabled: false" background="color:#0c1018">
 
   <a-entity id="rig" position="-0.5 -0.5 -0.5">
 
@@ -53,7 +53,8 @@
 
   </a-entity>
 
-  <a-entity id="camara-libre" camera="fov:50"></a-entity>
+  <a-light type="ambient" color="#ffffff" intensity="0.9"></a-light>
+  <a-entity id="camara-libre" camera="fov:50" position="2.2 1.6 2.1" look-at="#rig"></a-entity>
 </a-scene>
 
 <div class="panel">
